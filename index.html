@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lhecu Food | Ensaladas Artesanales & Saludables</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1B4332;
+            --primary-light: #2D6A4F;
+            --accent: #F4A261;
+            --accent-hover: #E76F51;
+            --bg-cream: #FDFCF8;
+            --bg-warm: #F5F1E8;
+            --text-dark: #1A1A1A;
+            --text-gray: #6B7280;
+            --white: #FFFFFF;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 35px 60px -15px rgba(0, 0, 0, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(27, 67, 50, 0.1);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(253, 252, 248, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 30px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .logo::before {
+            content: '🌿';
+            font-size: 1.5rem;
+            animation: leafFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes leafFloat {
+            0%, 100% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(-5px); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-cta:hover::before {
+            left: 100%;
+        }
+
+        .nav-cta:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(27, 67, 50, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(244, 162, 97, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 60% 80%, rgba(27, 67, 50, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(244, 162, 97, 0.15);
+            color: var(--accent-hover);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: rgba(244, 162, 97, 0.3);
+            z-index: -1;
+            transform: skewX(-10deg);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            max-width: 500px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(27, 67, 50, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(27, 67, 50, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-top: 0.3rem;
+        }
+
+        /* Hero Image Section */
+        .hero-visual {
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .main-image {
+            width: 90%;
+            height: 90%;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: 40px;
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: floatCard 4s ease-in-out infinite;
+        }
+
+        .floating-card.card-1 {
+            top: 10%;
+            left: -20px;
+            animation-delay: 0s;
+        }
+
+        .floating-card.card-2 {
+            bottom: 20%;
+            right: -30px;
+            animation-delay: 1s;
+        }
+
+        .floating-card.card-3 {
+            top: 50%;
+            right: -10px;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: #E8F5E9;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-info h4 {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 0.2rem;
+        }
+
+        .card-info p {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Marquee Section */
+        .marquee-section {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 0 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .marquee-item::before {
+            content: '✦';
+            color: var(--accent);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            background: var(--bg-warm);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(244, 162, 97, 0.15);
+            color: var(--accent-hover);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--bg-cream);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--primary);
+        }
+
+        .feature-card:hover .feature-icon {
+            filter: hue-rotate(20deg);
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+
+        /* Menu Section */
+        .menu {
+            padding: 6rem 5%;
+            background: var(--bg-cream);
+        }
+
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 2rem;
+            border: 2px solid transparent;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-btn:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .salad-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .salad-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+        }
+
+        .salad-image {
+            height: 280px;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .salad-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.05) 100%);
+        }
+
+        .salad-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .salad-badge.vegan {
+            background: #059669;
+        }
+
+        .salad-badge.spicy {
+            background: #DC2626;
+        }
+
+        .salad-content {
+            padding: 2rem;
+        }
+
+        .salad-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .salad-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .salad-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-hover);
+        }
+
+        .salad-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .salad-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            background: var(--bg-cream);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .salad-footer {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-add {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+
+        .btn-fav {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #E5E7EB;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-fav:hover {
+            border-color: #EF4444;
+            color: #EF4444;
+            transform: scale(1.1);
+        }
+
+        /* Process Section */
+        .process {
+            padding: 6rem 5%;
+            background: var(--primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            top: 30%;
+            right: -1rem;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .step-number::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover .step-number::before {
+            opacity: 1;
+            inset: -10px;
+        }
+
+        .process-step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 5%;
+            background: var(--bg-warm);
+        }
+
+        .testimonial-carousel {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 2rem 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .testimonial-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .testimonial-card {
+            min-width: 400px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 6rem;
+            color: var(--accent);
+            opacity: 0.2;
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .stars {
+            color: #FBBF24;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-img {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .author-info h4 {
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-cta {
+            background: white;
+            color: var(--primary);
+            padding: 1.3rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-brand p {
+            opacity: 0.7;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .footer-column h4 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-column a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            text-align: center;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* WhatsApp Fixed Button */
+        .whatsapp-fixed {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .whatsapp-btn {
+            width: 65px;
+            height: 65px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .whatsapp-tooltip {
+            background: white;
+            color: var(--text-dark);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .whatsapp-fixed:hover .whatsapp-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-visual {
+                height: 400px;
+            }
+
+            .floating-card {
+                display: none;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                min-width: 300px;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-icon {
+            font-size: 4rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Parallax Effect */
+        .parallax {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-icon" style="background-image: url('https://lhecufood.wordpress.com/wp-content/uploads/2024/09/backgrounderaser_20240104_082951469.png?w=1020&h=1024'); background-size: contain; width: 200px; height: 200px;"></div>
+
+            <p style="margin-top: 1rem; color: var(--primary); font-weight: 600;">Cargando Lhecu Food...</p>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">LhecuFood</a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#menu">Menú</a></li>
+                <li><a href="#proceso">Cómo Funciona</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+            </ul>
+            <a href="https://wa.me/+542281528992?text=¡Hola!%20Vengo%20de%20la%20web%20de%20Lhecu%20Food%20y%20quiero%20hacer%20un%20pedido" class="nav-cta" target="_blank">
+                <i class="fab fa-whatsapp"></i> Pedir Ahora
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg-pattern"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>✨</span> Más de 1,000 clientes felices
+            </div>
+            <h1>
+                Ensaladas que <span>te hacen sentir bien</span> por dentro y por fuera
+            </h1>
+            <p class="hero-subtitle">
+                Ingredientes frescos seleccionados diariamente, combinaciones únicas creadas por nutricionistas 
+                y preparadas con amor. Directo de la naturaleza a tu mesa.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/+542281528992?text=¡Hola!%20Vengo%20de%20la%20web%20y%20quiero%20hacer%20mi%20primer%20pedido" class="btn-primary" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Hacer Pedido
+                </a>
+                <a href="#menu" class="btn-secondary">
+                    Ver Menú <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-target="25">0</span>
+                    <span class="stat-label">Minutos prep</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-target="100">0</span>
+                    <span class="stat-label">% Fresco</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-target="50">0</span>
+                    <span class="stat-label">Ingredientes</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="loader-icon" style="background-image: url('https://lhecufood.wordpress.com/wp-content/uploads/2024/09/backgrounderaser_20240104_082951469.png?w=1020&h=1024'); background-size: contain; width: px; height: 700px;"
+                ></div>
+            <div>
+    </div>
+
+                <div class="floating-card card-1">
+                    <div class="card-icon">⭐</div>
+                    <div class="card-info">
+                        <h4>Calificación</h4>
+                        <p>4.9/5.0 Estrellas</p>
+                    </div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-icon">🚚</div>
+                    <div class="card-info">
+                        <h4>Delivery</h4>
+                        <p>Gratis > $2500</p>
+                    </div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-icon">🌱</div>
+                    <div class="card-info">
+                        <h4>100% Natural</h4>
+                        <p>Sin conservantes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Section -->
+    <section class="marquee-section">
+        <div class="marquee-content">
+            <div class="marquee-item">Ingredientes frescos del día</div>
+            <div class="marquee-item">Preparación al momento</div>
+            <div class="marquee-item">Opciones veganas y vegetarianas</div>
+            <div class="marquee-item">Delivery rápido</div>
+            <div class="marquee-item">Sin conservantes</div>
+            <div class="marquee-item">Empaques eco-friendly</div>
+            <div class="marquee-item">Ingredientes frescos del día</div>
+            <div class="marquee-item">Preparación al momento</div>
+            <div class="marquee-item">Opciones veganas y vegetarianas</div>
+            <div class="marquee-item">Delivery rápido</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">¿Por qué elegirnos?</span>
+                <h2 class="section-title">Calidad en cada bocado</h2>
+                <p class="section-subtitle">Nos diferenciamos por nuestra obsesión con la frescura y el sabor auténtico</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌿</div>
+                    <h3>Ingredientes Locales</h3>
+                    <p>Trabajamos directamente con agricultores locales para garantizar la máxima frescura y apoyar la economía de nuestra región.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Preparación Express</h3>
+                    <p>Tu ensalada se prepara al momento de recibir tu pedido. De nuestra cocina a tus manos en menos de 30 minutos.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">♻️</div>
+                    <h3>Sostenibles</h3>
+                    <p>Usamos empaques biodegradables y compostables. Cuidamos tu salud y la del planeta.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🥗</div>
+                    <h3>Personalización Total</h3>
+                    <p>¿No te gusta algo? ¿Quieres extra de algo? Sin problema. Tu ensalada, a tu manera, sin costo extra.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">💪</div>
+                    <h3>Opciones Proteicas</h3>
+                    <p>Desde pollo hasta fiambres. Proteínas de calidad para cada estilo de vida.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📱</div>
+                    <h3>Pedido Fácil</h3>
+                    <p>Un simple mensaje de WhatsApp y tu pedido está en camino. Sin apps complicadas ni registros.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestro Menú</span>
+                <h2 class="section-title">Ensaladas creadas con pasión</h2>
+                <p class="section-subtitle">Cada receta ha sido diseñada por nutricionistas y chefs para equilibrar sabor y bienestar</p>
+            </div>
+
+            <div class="menu-tabs">
+                <button class="tab-btn active" onclick="filterMenu('all')">Todas</button>
+                <button class="tab-btn" onclick="filterMenu('premium')">Premium</button>
+                <button class="tab-btn" onclick="filterMenu('vegan')">Veganas</button>
+                <button class="tab-btn" onclick="filterMenu('protein')">Altas en Proteína</button>
+            </div>
+
+            <div class="menu-grid" id="menuGrid">
+                <!-- Salad 1 -->
+                <div class="salad-card" data-category="premium">
+                    <div class="salad-image">
+                        🥗
+                        <span class="salad-badge">Más Vendida</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">César</h3>
+                            </div>
+                            <span class="salad-price">$7,000</span>
+                        </div>
+                        <p class="salad-description">Lechuga crespa, crotones de pan, queso y pechuga de pollo. (aderezo opcionales).</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-fire"></i> 184 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-drumstick-bite"></i> 150g prot</span>
+                            <span class="meta-tag"><i class="fas fa-clock"></i> 25 min</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/+542281528992?text=¡Hola!%20Quiero%20la%20Ensalada%20César" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 2 -->
+                <div class="salad-card" data-category="vegan">
+                    <div class="salad-image">
+                        🥑
+                        <span class="salad-badge vegan">100% Vegana</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Bowl de la Tierra</h3>
+                            </div>
+                            <span class="salad-price">$15.000</span>
+                        </div>
+                        <p class="salad-description">Mix de kale y espinaca, quinoa orgánica, aguacate hass, garbanzos especiados, zanahoria rallada, semillas de calabaza y aderezo de tahini con limón.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-leaf"></i> 380 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-seedling"></i> 18g prot</span>
+                            <span class="meta-tag"><i class="fas fa-heart"></i> Alta fibra</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/+542281528992?text=¡Hola!%20Quiero%20el%20Bowl%20de%20la%20Tierra" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 3 -->
+                <div class="salad-card" data-category="premium">
+                    <div class="salad-image">
+                        🍓
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Dulce Encanto</h3>
+                            </div>
+                            <span class="salad-price">$13.500</span>
+                        </div>
+                        <p class="salad-description">Espinaca baby, fresas orgánicas, queso de cabra cremoso, almendras caramelizadas con miel, cebolla morada encurtida y vinagreta balsámica de frutos rojos.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-apple-alt"></i> 320 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-cheese"></i> Vegetariana</span>
+                            <span class="meta-tag"><i class="fas fa-candy-cane"></i> Dulce</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20la%20Ensalada%20Dulce%20Encanto" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 4 -->
+                <div class="salad-card" data-category="protein">
+                    <div class="salad-image">
+                        🥩
+                        <span class="salad-badge">Proteína +</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Atleta Pro</h3>
+                            </div>
+                            <span class="salad-price">$16.500</span>
+                        </div>
+                        <p class="salad-description">Pechuga de pollo o filete de salmón, huevo cocido perfecto, aguacate, edamames, brócoli al vapor, quinoa y aderezo de yogur griego con eneldo.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-dumbbell"></i> 520 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-fish"></i> 45g prot</span>
+                            <span class="meta-tag"><i class="fas fa-running"></i> Post-workout</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20la%20Ensalada%20Atleta%20Pro" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 5 -->
+                <div class="salad-card" data-category="vegan">
+                    <div class="salad-image">
+                        🌮
+                        <span class="salad-badge spicy">Picante</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Fiesta Mexicana</h3>
+                            </div>
+                            <span class="salad-price">$14.000</span>
+                        </div>
+                        <p class="salad-description">Lechuga iceberg, frijoles negros, elote dulce, aguacate, pico de gallo fresco, jalapeños (opcional), tortilla crujiente de maíz y aderezo de cilantro y lima.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-pepper-hot"></i> 360 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-leaf"></i> Vegana</span>
+                            <span class="meta-tag"><i class="fas fa-fire-alt"></i> Picante</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20la%20Ensalada%20Fiesta%20Mexicana" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 6 -->
+                <div class="salad-card" data-category="all">
+                    <div class="salad-image">
+                        🥗
+                        <span class="salad-badge" style="background: var(--primary);">Personalizable</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Crea tu Propia</h3>
+                            </div>
+                            <span class="salad-price">Desde $12.000</span>
+                        </div>
+                        <p class="salad-description">Elige tu base (5 opciones), 4 toppings frescos, 1 proteína (vegana o animal) y 1 aderezo artesanal. ¡Más de 500 combinaciones posibles!</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-sliders-h"></i> A tu gusto</span>
+                            <span class="meta-tag"><i class="fas fa-expand-arrows-alt"></i> 3 tamaños</span>
+                            <span class="meta-tag"><i class="fas fa-check"></i> Sin costo extra</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20armar%20mi%20ensalada%20personalizada" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Armar Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    <div class="menu-grid" id="menuGrid">
+                <!-- Salad 7 -->
+                <div class="salad-card" data-category="premium">
+                    <div class="salad-image">
+                        🥗
+                        <span class="salad-badge">Más Vendida</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">César Suprema</h3>
+                            </div>
+                            <span class="salad-price">$14.500</span>
+                        </div>
+                        <p class="salad-description">Lechuga romana orgánica, pollo grillado marinado en hierbas, crutones artesanales de ajo, queso parmesano reggiano y aderezo césar de la casa (anchoas opcionales).</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-fire"></i> 450 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-drumstick-bite"></i> 35g prot</span>
+                            <span class="meta-tag"><i class="fas fa-clock"></i> 12 min</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/+542281528992?text=¡Hola!%20Quiero%20la%20Ensalada%20César%20Suprema" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 8 -->
+                <div class="salad-card" data-category="vegan">
+                    <div class="salad-image">
+                        🥑
+                        <span class="salad-badge vegan">100% Vegana</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Bowl de la Tierra</h3>
+                            </div>
+                            <span class="salad-price">$15.000</span>
+                        </div>
+                        <p class="salad-description">Mix de kale y espinaca, quinoa orgánica, aguacate hass, garbanzos especiados, zanahoria rallada, semillas de calabaza y aderezo de tahini con limón.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-leaf"></i> 380 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-seedling"></i> 18g prot</span>
+                            <span class="meta-tag"><i class="fas fa-heart"></i> Alta fibra</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/+542281528992?text=¡Hola!%20Quiero%20el%20Bowl%20de%20la%20Tierra" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 9 -->
+                <div class="salad-card" data-category="premium">
+                    <div class="salad-image">
+                        🍓
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Dulce Encanto</h3>
+                            </div>
+                            <span class="salad-price">$13.500</span>
+                        </div>
+                        <p class="salad-description">Espinaca baby, fresas orgánicas, queso de cabra cremoso, almendras caramelizadas con miel, cebolla morada encurtida y vinagreta balsámica de frutos rojos.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-apple-alt"></i> 320 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-cheese"></i> Vegetariana</span>
+                            <span class="meta-tag"><i class="fas fa-candy-cane"></i> Dulce</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20la%20Ensalada%20Dulce%20Encanto" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 10 -->
+                <div class="salad-card" data-category="protein">
+                    <div class="salad-image">
+                        🥩
+                        <span class="salad-badge">Proteína +</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Atleta Pro</h3>
+                            </div>
+                            <span class="salad-price">$16.500</span>
+                        </div>
+                        <p class="salad-description">Pechuga de pollo o filete de salmón, huevo cocido perfecto, aguacate, edamames, brócoli al vapor, quinoa y aderezo de yogur griego con eneldo.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-dumbbell"></i> 520 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-fish"></i> 45g prot</span>
+                            <span class="meta-tag"><i class="fas fa-running"></i> Post-workout</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20la%20Ensalada%20Atleta%20Pro" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 11 -->
+                <div class="salad-card" data-category="vegan">
+                    <div class="salad-image">
+                        🌮
+                        <span class="salad-badge spicy">Picante</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Fiesta Mexicana</h3>
+                            </div>
+                            <span class="salad-price">$14.000</span>
+                        </div>
+                        <p class="salad-description">Lechuga iceberg, frijoles negros, elote dulce, aguacate, pico de gallo fresco, jalapeños (opcional), tortilla crujiente de maíz y aderezo de cilantro y lima.</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-pepper-hot"></i> 360 kcal</span>
+                            <span class="meta-tag"><i class="fas fa-leaf"></i> Vegana</span>
+                            <span class="meta-tag"><i class="fas fa-fire-alt"></i> Picante</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20la%20Ensalada%20Fiesta%20Mexicana" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Pedir Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salad 12 -->
+                <div class="salad-card" data-category="all">
+                    <div class="salad-image">
+                        🥗
+                        <span class="salad-badge" style="background: var(--primary);">Personalizable</span>
+                    </div>
+                    <div class="salad-content">
+                        <div class="salad-header">
+                            <div>
+                                <h3 class="salad-title">Crea tu Propia</h3>
+                            </div>
+                            <span class="salad-price">Desde $12.000</span>
+                        </div>
+                        <p class="salad-description">Elige tu base (5 opciones), 4 toppings frescos, 1 proteína (vegana o animal) y 1 aderezo artesanal. ¡Más de 500 combinaciones posibles!</p>
+                        <div class="salad-meta">
+                            <span class="meta-tag"><i class="fas fa-sliders-h"></i> A tu gusto</span>
+                            <span class="meta-tag"><i class="fas fa-expand-arrows-alt"></i> 3 tamaños</span>
+                            <span class="meta-tag"><i class="fas fa-check"></i> Sin costo extra</span>
+                        </div>
+                        <div class="salad-footer">
+                            <a href="https://wa.me/54911528992?text=¡Hola!%20Quiero%20armar%20mi%20ensalada%20personalizada" class="btn-add" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Armar Ahora
+                            </a>
+                            <button class="btn-fav"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Process Section -->
+    <section class="process" id="proceso">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" style="background: rgba(255,255,255,0.2); color: white;">Simple y Rápido</span>
+                <h2 class="section-title" style="color: white;">¿Cómo funciona?</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">De tu antojo a tu mesa en 3 simples pasos</p>
+            </div>
+
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Elige</h3>
+                    <p>Selecciona de nuestro menú o arma tu combinación perfecta con tus ingredientes favoritos.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Escríbenos</h3>
+                    <p>Haz clic en pedir, te abrimos WhatsApp con tu selección lista. Personaliza si quieres.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Preparamos</h3>
+                    <p>Nuestros chefs preparan tu ensalada al momento con ingredientes frescos del día.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Disfruta</h3>
+                    <p>Retira en nuestro local o te la llevamos a domicilio. Frescura garantizada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Testimonios</span>
+                <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+                <p class="section-subtitle">Más de 1,000 personas han transformado su alimentación con nosotros</p>
+            </div>
+
+            <div class="testimonial-carousel">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"son muy ricas y las de frutas me encantan son de muy excenlente calidad la que mas prefiero es la cesar es riquisima."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">M</div>
+                        <div class="author-info">
+                            <h4>anna valentina hernandez miranda</h4>
+                            <p>la loca del barrio · Cliente desde 2025</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Como entrenador personal, necesito comida saludable y rápida. La Atleta Pro tiene la proteína perfecta post-entreno y sabe increíble. Mis clientes también la aman."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">C</div>
+                        <div class="author-info">
+                            <h4>Carlos Andrés Martínez</h4>
+                            <p>Entrenador Personal · Cliente frecuente</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Por fin opciones veganas que no son aburridas! El Bowl de la Tierra tiene texturas y sabores increíbles. Además amo que usen empaques eco-friendly. 100% recomendado."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">L</div>
+                        <div class="author-info">
+                            <h4>Laura Gómez</h4>
+                            <p>Nutricionista · Cliente nueva</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Pedimos para una reunión de oficina y todos quedaron encantados. La presentación es hermosa y la frescura se nota. Ya somos clientes fijos los viernes."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">A</div>
+                        <div class="author-info">
+                            <h4>Andrea Restrepo</h4>
+                            <p>Gerente de RRHH · Pedidos corporativos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>¿Listo para comer sano?</h2>
+            <p>Tu primera ensalada te espera. Haz tu pedido ahora y descubre por qué somos los favoritos de la ciudad.</p>
+            <a href="https://wa.me/+542281528992?text=¡Hola!%20Vengo%20de%20la%20web%20y%20quiero%20hacer%20mi%20primer%20pedido" class="btn-cta" target="_blank">
+                <i class="fab fa-whatsapp"></i> Hacer Pedido por WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Lhecu<span style="color: var(--accent);">Food</span></h3>
+                <p>Ensaladas artesanales preparadas con ingredientes frescos, locales y mucho amor. Porque comer bien es sentirse bien.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="#inicio"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                    <li><a href="#menu"><i class="fas fa-chevron-right"></i> Menú</a></li>
+                    <li><a href="#proceso"><i class="fas fa-chevron-right"></i> Cómo Funciona</a></li>
+                    <li><a href="#testimonios"><i class="fas fa-chevron-right"></i> Testimonios</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Horario</h4>
+                <ul>
+                    <li>Lunes - Viernes: 9:00am - 9:00pm</li>
+                    <li>Sábados: 9:00am - 9:00pm</li>
+                    <li>Domingos: Cerrado</li>
+                    <li style="margin-top: 1rem; color: var(--accent);">Delivery hasta las 13:30pm</li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> San Martin 775, azul</li>
+                    <li><i class="fas fa-phone"></i> +54 2281 52 8992</li>
+                    <li><i class="fas fa-envelope"></i> lheculhecu@gmail.com</li>
+                    <li><i class="fab fa-whatsapp"></i> WhatsApp:+54 2281 52 8992</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Lhecu Food. Todos los derechos reservados. Hecho con 🥗 y 💚 en Argentina</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Fixed Button -->
+    <div class="whatsapp-fixed">
+        <div class="whatsapp-tooltip">¡Escríbenos! Respondemos en minutos ⚡</div>
+        <a href="https://wa.me/+542281528992?text=¡Hola!%20Vengo%20de%20la%20web%20de%20Lhecu%20Food" class="whatsapp-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <script>
+        // Remove loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Hide cursor on mobile
+        if ('ontouchstart' in window) {
+            cursor.style.display = 'none';
+            cursorFollower.style.display = 'none';
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate numbers
+                    if (entry.target.querySelector('.stat-number')) {
+                        animateNumbers(entry.target);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in, .stat').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Number animation
+        function animateNumbers(container) {
+            const numbers = container.querySelectorAll('.stat-number');
+            numbers.forEach(num => {
+                const target = parseInt(num.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        num.textContent = target + (target === 100 ? '%' : target === 15 ? '' : '+');
+                        clearInterval(timer);
+                    } else {
+                        num.textContent = Math.floor(current);
+                    }
+                }, 16);
+            });
+        }
+
+        // Menu filter
+        function filterMenu(category) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            const cards = document.querySelectorAll('.salad-card');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 10);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Favorite button toggle
+        document.querySelectorAll('.btn-fav').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.style.borderColor = '#EF4444';
+                    this.style.color = '#EF4444';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.style.borderColor = '#E5E7EB';
+                    this.style.color = 'inherit';
+                }
+            });
+        });
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const parallaxElements = document.querySelectorAll('.parallax');
+            parallaxElements.forEach(el => {
+                const speed = 0.5;
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    const yPos = -(rect.top * speed);
+                    el.style.transform = `translateY(${yPos}px)`;
+                }
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Update footer year
+        document.querySelector('.footer-bottom p').innerHTML = 
+            `&copy; ${new Date().getFullYear()} Lhecu Food. Todos los derechos reservados. Hecho con 🥗 y 💚 en argentina`;
+    </script>
+
+</body>
+</html>
