@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Ensaladas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #00d9ff 0%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+        }
+
+        /* Categorías de ingredientes */
+        .category {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            color: #00ff88;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Grid de ingredientes */
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .ingredient-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ingredient-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            border-radius: 50%;
+        }
+
+        .ingredient-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .ingredient-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 136, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .ingredient-card.selected {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 217, 255, 0.2));
+            border-color: #00ff88;
+            transform: scale(1.05);
+        }
+
+        .ingredient-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00ff88;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .ingredient-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .ingredient-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .ingredient-calories {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 5px;
+        }
+
+        /* Panel de resumen */
+        .summary-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .summary-panel.active {
+            transform: translateY(0);
+        }
+
+        .summary-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .summary-info h3 {
+            color: #00ff88;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .summary-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .selected-count {
+            background: linear-gradient(135deg, #00ff88, #00d9ff);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.95);
+        }
+
+        /* Notificación */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 136, 0.9);
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .ingredients-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .summary-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .category:nth-child(2) { animation-delay: 0.1s; }
+        .category:nth-child(3) { animation-delay: 0.2s; }
+        .category:nth-child(4) { animation-delay: 0.3s; }
+        .category:nth-child(5) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🥗 Crea tu Ensalada</h1>
+            <p>Selecciona tus ingredientes favoritos</p>
+        </div>
+
+        <!-- Bases -->
+        <div class="category">
+            <h2 class="category-title">
+                <span class="category-icon">🥬</span>
+                Bases Verdes
+            </h2>
+            <div class="ingredients-grid">
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Lechuga Romana', 'base')">
+                    <span class="ingredient-icon">🥬</span>
+                    <span class="ingredient-name">Lechuga Romana</span>
+                    <span class="ingredient-calories">15 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Espinaca', 'base')">
+                    <span class="ingredient-icon">🍃</span>
+                    <span class="ingredient-name">Espinaca</span>
+                    <span class="ingredient-calories">23 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Rúcula', 'base')">
+                    <span class="ingredient-icon">🌿</span>
+                    <span class="ingredient-name">Rúcula</span>
+                    <span class="ingredient-calories">25 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Mix de Hojas', 'base')">
+                    <span class="ingredient-icon">🥗</span>
+                    <span class="ingredient-name">Mix de Hojas</span>
+                    <span class="ingredient-calories">20 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Kale', 'base')">
+                    <span class="ingredient-icon">🌱</span>
+                    <span class="ingredient-name">Kale</span>
+                    <span class="ingredient-calories">49 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Repollo Morado', 'base')">
+                    <span class="ingredient-icon">🟣</span>
+                    <span class="ingredient-name">Repollo Morado</span>
+                    <span class="ingredient-calories">25 kcal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proteínas -->
+        <div class="category">
+            <h2 class="category-title">
+                <span class="category-icon">🍗</span>
+                Proteínas
+            </h2>
+            <div class="ingredients-grid">
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Pechuga de Pollo', 'proteina')">
+                    <span class="ingredient-icon">🍗</span>
+                    <span class="ingredient-name">Pechuga de Pollo</span>
+                    <span class="ingredient-calories">165 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Atún', 'proteina')">
+                    <span class="ingredient-icon">🐟</span>
+                    <span class="ingredient-name">Atún</span>
+                    <span class="ingredient-calories">132 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Salmón', 'proteina')">
+                    <span class="ingredient-icon">🐠</span>
+                    <span class="ingredient-name">Salmón</span>
+                    <span class="ingredient-calories">208 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Huevo Cocido', 'proteina')">
+                    <span class="ingredient-icon">🥚</span>
+                    <span class="ingredient-name">Huevo Cocido</span>
+                    <span class="ingredient-calories">155 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Queso Feta', 'proteina')">
+                    <span class="ingredient-icon">🧀</span>
+                    <span class="ingredient-name">Queso Feta</span>
+                    <span class="ingredient-calories">264 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Garbanzos', 'proteina')">
+                    <span class="ingredient-icon">🥫</span>
+                    <span class="ingredient-name">Garbanzos</span>
+                    <span class="ingredient-calories">164 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Tofu', 'proteina')">
+                    <span class="ingredient-icon">🧊</span>
+                    <span class="ingredient-name">Tofu</span>
+                    <span class="ingredient-calories">76 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Jamón de Pavo', 'proteina')">
+                    <span class="ingredient-icon">🦃</span>
+                    <span class="ingredient-name">Jamón de Pavo</span>
+                    <span class="ingredient-calories">104 kcal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vegetales -->
+        <div class="category">
+            <h2 class="category-title">
+                <span class="category-icon">🥕</span>
+                Vegetales & Frutas
+            </h2>
+            <div class="ingredients-grid">
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Tomate Cherry', 'vegetal')">
+                    <span class="ingredient-icon">🍅</span>
+                    <span class="ingredient-name">Tomate Cherry</span>
+                    <span class="ingredient-calories">18 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Pepino', 'vegetal')">
+                    <span class="ingredient-icon">🥒</span>
+                    <span class="ingredient-name">Pepino</span>
+                    <span class="ingredient-calories">15 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Zanahoria', 'vegetal')">
+                    <span class="ingredient-icon">🥕</span>
+                    <span class="ingredient-name">Zanahoria</span>
+                    <span class="ingredient-calories">41 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Aguacate', 'vegetal')">
+                    <span class="ingredient-icon">🥑</span>
+                    <span class="ingredient-name">Aguacate</span>
+                    <span class="ingredient-calories">160 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Manzana', 'vegetal')">
+                    <span class="ingredient-icon">🍎</span>
+                    <span class="ingredient-name">Manzana</span>
+                    <span class="ingredient-calories">52 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Uvas', 'vegetal')">
+                    <span class="ingredient-icon">🍇</span>
+                    <span class="ingredient-name">Uvas</span>
+                    <span class="ingredient-calories">69 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Naranja', 'vegetal')">
+                    <span class="ingredient-icon">🍊</span>
+                    <span class="ingredient-name">Naranja</span>
+                    <span class="ingredient-calories">47 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Granada', 'vegetal')">
+                    <span class="ingredient-icon">❤️</span>
+                    <span class="ingredient-name">Granada</span>
+                    <span class="ingredient-calories">83 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Betabel', 'vegetal')">
+                    <span class="ingredient-icon">🟥</span>
+                    <span class="ingredient-name">Betabel</span>
+                    <span class="ingredient-calories">43 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Champiñones', 'vegetal')">
+                    <span class="ingredient-icon">🍄</span>
+                    <span class="ingredient-name">Champiñones</span>
+                    <span class="ingredient-calories">22 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Cebolla Morada', 'vegetal')">
+                    <span class="ingredient-icon">🧅</span>
+                    <span class="ingredient-name">Cebolla Morada</span>
+                    <span class="ingredient-calories">40 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Pimiento', 'vegetal')">
+                    <span class="ingredient-icon">🫑</span>
+                    <span class="ingredient-name">Pimiento</span>
+                    <span class="ingredient-calories">20 kcal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toppings -->
+        <div class="category">
+            <h2 class="category-title">
+                <span class="category-icon">🌰</span>
+                Toppings & Extras
+            </h2>
+            <div class="ingredients-grid">
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Nueces', 'topping')">
+                    <span class="ingredient-icon">🥜</span>
+                    <span class="ingredient-name">Nueces</span>
+                    <span class="ingredient-calories">654 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Almendras', 'topping')">
+                    <span class="ingredient-icon">🌰</span>
+                    <span class="ingredient-name">Almendras</span>
+                    <span class="ingredient-calories">579 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Semillas de Girasol', 'topping')">
+                    <span class="ingredient-icon">🌻</span>
+                    <span class="ingredient-name">Semillas Girasol</span>
+                    <span class="ingredient-calories">584 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Pasas', 'topping')">
+                    <span class="ingredient-icon">🍇</span>
+                    <span class="ingredient-name">Pasas</span>
+                    <span class="ingredient-calories">299 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Crotones', 'topping')">
+                    <span class="ingredient-icon">🍞</span>
+                    <span class="ingredient-name">Crotones</span>
+                    <span class="ingredient-calories">407 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Bacon Bits', 'topping')">
+                    <span class="ingredient-icon">🥓</span>
+                    <span class="ingredient-name">Bacon Bits</span>
+                    <span class="ingredient-calories">476 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Quinoa', 'topping')">
+                    <span class="ingredient-icon">🌾</span>
+                    <span class="ingredient-name">Quinoa</span>
+                    <span class="ingredient-calories">120 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Chía', 'topping')">
+                    <span class="ingredient-icon">⚫</span>
+                    <span class="ingredient-name">Chía</span>
+                    <span class="ingredient-calories">486 kcal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aderezos -->
+        <div class="category">
+            <h2 class="category-title">
+                <span class="category-icon">🍶</span>
+                Aderezos
+            </h2>
+            <div class="ingredients-grid">
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Vinagreta Balsámica', 'aderezo')">
+                    <span class="ingredient-icon">🍶</span>
+                    <span class="ingredient-name">Vinagreta Balsámica</span>
+                    <span class="ingredient-calories">88 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Ranch', 'aderezo')">
+                    <span class="ingredient-icon">🥛</span>
+                    <span class="ingredient-name">Ranch</span>
+                    <span class="ingredient-calories">145 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'César', 'aderezo')">
+                    <span class="ingredient-icon">🥄</span>
+                    <span class="ingredient-name">César</span>
+                    <span class="ingredient-calories">180 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Italiano', 'aderezo')">
+                    <span class="ingredient-icon">🫒</span>
+                    <span class="ingredient-name">Italiano</span>
+                    <span class="ingredient-calories">70 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Miel Mostaza', 'aderezo')">
+                    <span class="ingredient-icon">🍯</span>
+                    <span class="ingredient-name">Miel Mostaza</span>
+                    <span class="ingredient-calories">120 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Limón & Aceite', 'aderezo')">
+                    <span class="ingredient-icon">🍋</span>
+                    <span class="ingredient-name">Limón & Aceite</span>
+                    <span class="ingredient-calories">120 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Aguacate Cremoso', 'aderezo')">
+                    <span class="ingredient-icon">🥑</span>
+                    <span class="ingredient-name">Aguacate Cremoso</span>
+                    <span class="ingredient-calories">150 kcal</span>
+                </div>
+                <div class="ingredient-card" onclick="toggleIngredient(this, 'Sin Aderezo', 'aderezo')">
+                    <span class="ingredient-icon">🚫</span>
+                    <span class="ingredient-name">Sin Aderezo</span>
+                    <span class="ingredient-calories">0 kcal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Espacio para el panel fijo -->
+        <div style="height: 120px;"></div>
+    </div>
+
+    <!-- Panel de resumen flotante -->
+    <div class="summary-panel" id="summaryPanel">
+        <div class="summary-content">
+            <div class="summary-info">
+                <h3>🥗 Tu Ensalada</h3>
+                <p><span id="totalItems">0</span> ingredientes seleccionados • <span id="totalCalories">0</span> kcal aprox.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="selected-count" id="selectedCount">0</span>
+                <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+                    <span>📱</span>
+                    Enviar a WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación -->
+    <div class="notification" id="notification">
+        ¡Ensalada enviada a WhatsApp!
+    </div>
+
+    <script>
+        // Estado de selección
+        let selectedIngredients = {
+            base: [],
+            proteina: [],
+            vegetal: [],
+            topping: [],
+            aderezo: []
+        };
+
+        // Calorías por ingrediente (simplificado)
+        const caloriesMap = {
+            'Lechuga Romana': 15, 'Espinaca': 23, 'Rúcula': 25, 'Mix de Hojas': 20, 'Kale': 49, 'Repollo Morado': 25,
+            'Pechuga de Pollo': 165, 'Atún': 132, 'Salmón': 208, 'Huevo Cocido': 155, 'Queso Feta': 264, 'Garbanzos': 164, 'Tofu': 76, 'Jamón de Pavo': 104,
+            'Tomate Cherry': 18, 'Pepino': 15, 'Zanahoria': 41, 'Aguacate': 160, 'Manzana': 52, 'Uvas': 69, 'Naranja': 47, 'Granada': 83, 'Betabel': 43, 'Champiñones': 22, 'Cebolla Morada': 40, 'Pimiento': 20,
+            'Nueces': 654, 'Almendras': 579, 'Semillas de Girasol': 584, 'Pasas': 299, 'Crotones': 407, 'Bacon Bits': 476, 'Quinoa': 120, 'Chía': 486,
+            'Vinagreta Balsámica': 88, 'Ranch': 145, 'César': 180, 'Italiano': 70, 'Miel Mostaza': 120, 'Limón & Aceite': 120, 'Aguacate Cremoso': 150, 'Sin Aderezo': 0
+        };
+
+        // Toggle ingrediente
+        function toggleIngredient(element, name, category) {
+            element.classList.toggle('selected');
+            
+            if (element.classList.contains('selected')) {
+                selectedIngredients[category].push(name);
+                showNotification(`✓ ${name} agregado`);
+            } else {
+                selectedIngredients[category] = selectedIngredients[category].filter(i => i !== name);
+                showNotification(`✗ ${name} removido`);
+            }
+            
+            updateSummary();
+        }
+
+        // Actualizar resumen
+        function updateSummary() {
+            const panel = document.getElementById('summaryPanel');
+            const totalItems = Object.values(selectedIngredients).flat().length;
+            const totalCalories = Object.values(selectedIngredients).flat().reduce((sum, item) => sum + (caloriesMap[item] || 0), 0);
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalCalories').textContent = totalCalories;
+            document.getElementById('selectedCount').textContent = totalItems;
+            
+            if (totalItems > 0) {
+                panel.classList.add('active');
+            } else {
+                panel.classList.remove('active');
+            }
+        }
+
+        // Enviar a WhatsApp
+        function sendToWhatsApp() {
+            const allIngredients = Object.values(selectedIngredients).flat();
+            
+            if (allIngredients.length === 0) {
+                showNotification('⚠️ Selecciona al menos un ingrediente');
+                return;
+            }
+
+            // Construir mensaje
+            let message = '🥗 *MI PEDIDO DE ENSALADA*%0A%0A';
+            
+            if (selectedIngredients.base.length > 0) {
+                message += '*🥬 Base:*%0A' + selectedIngredients.base.map(i => `• ${i}`).join('%0A') + '%0A%0A';
+            }
+            if (selectedIngredients.proteina.length > 0) {
+                message += '*🍗 Proteínas:*%0A' + selectedIngredients.proteina.map(i => `• ${i}`).join('%0A') + '%0A%0A';
+            }
+            if (selectedIngredients.vegetal.length > 0) {
+                message += '*🥕 Vegetales & Frutas:*%0A' + selectedIngredients.vegetal.map(i => `• ${i}`).join('%0A') + '%0A%0A';
+            }
+            if (selectedIngredients.topping.length > 0) {
+                message += '*🌰 Toppings:*%0A' + selectedIngredients.topping.map(i => `• ${i}`).join('%0A') + '%0A%0A';
+            }
+            if (selectedIngredients.aderezo.length > 0) {
+                message += '*🍶 Aderezo:*%0A' + selectedIngredients.aderezo.map(i => `• ${i}`).join('%0A') + '%0A%0A';
+            }
+            
+            const totalCalories = Object.values(selectedIngredients).flat().reduce((sum, item) => sum + (caloriesMap[item] || 0), 0);
+            message += `*Calorías aproximadas:* ${totalCalories} kcal%0A`;
+            message += '*Total de ingredientes:* ' + allIngredients.length;
+
+            // Abrir WhatsApp (cambia el número por el del negocio)
+            const phoneNumber = '+542281528992'; // ← Cambia este número
+            const whatsappUrl = `https://wa.me/${+542281528992}?text=${message}`;
+            
+            window.open(whatsappUrl, '_blank');
+            
+            showNotification('📱 Abriendo WhatsApp...');
+        }
+
+        // Mostrar notificación
+        function showNotification(text) {
+            const notif = document.getElementById('notification');
+            notif.textContent = text;
+            notif.classList.add('show');
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 2000);
+        }
+
+        // Efecto de partículas en el fondo
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.9) {
+                createParticle(e.pageX, e.pageY);
+            }
+        });
+
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.background = 'rgba(0, 255, 136, 0.6)';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            particle.style.animation = 'particle-float 1s ease-out forwards';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 1000);
+        }
+
+        // Agregar animación de partícula
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particle-float {
+                to {
+                    transform: translateY(-50px) scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
